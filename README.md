@@ -1,9 +1,9 @@
-#Spatial ecology in R
+# Spatial ecology in R 👾
 
-##Professor
+## Professor 🌞
 Duccio Rucchini
 
-##Main script in this repos 
+## Main script in this repos 🦛
 +scripts on population
 +scripts on communities
 +scripts on ecosystem
