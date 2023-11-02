@@ -37,7 +37,7 @@ im.list()
 #every colour is a spectral band. 
 #band 8 is near infra red (NIR), 10 metres of spatial resolution
 
-#let's import dara
+#let's import data
 b2<-im.import("sentinel.dolomites.b2.tif")
 #wgs=world geographyc system, 3D elipsoid and they translated in UTM, universal 
 #transverse mercator, we divided the hearth in 60 zones
@@ -79,3 +79,34 @@ plot(stacksent, col=cl)
 
 #if we want to plot only the NIR band
 plot(stacksent[[4]], col=cl) #remember the double quadratic parenthesis
+
+
+#see presentation about reflectance
+#we prefere to store data about reflectance with integers instead of float numbers
+
+#exercise: plot in a multiframe the bands with different colour ramps
+
+#exercise: plot in a multiframe the bands with different colour ramps
+
+dev.off()
+
+par(mfrow=c(2,2))
+clb<-colorRampPalette(c("darkblue","blue","lightblue"))(100)
+plot(b2, col=clb)
+
+#do this for every colour and band
+
+
+
+#RGB colours=red, green, blue. how computers create colours. 
+
+#RGB space
+#stacksent: 
+#band2 blue element 1, stacksent[[1]]
+#band3 green element 2, stacksent[[2]]
+#band4 red element 3, stacksent[[3]]
+#band8 nir element 4 stacksent[[4]]
+im.plotRGB(stacksent, r=3, g=2, b=1)
+#additional info from NIR to be used to plot this images with a meaningful manner
+
+
