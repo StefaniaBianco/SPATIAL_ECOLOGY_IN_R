@@ -110,3 +110,30 @@ im.plotRGB(stacksent, r=3, g=2, b=1)
 #additional info from NIR to be used to plot this images with a meaningful manner
 
 
+LECTURE 07-11
+library(imageRy)
+library(terra)
+im.list()
+b2<-im.import("sentinel.dolomites.b2.tif")
+b3<-im.import("sentinel.dolomites.b3.tif")
+b4<-im.import("sentinel.dolomites.b4.tif")
+b8<-im.import("sentinel.dolomites.b8.tif")
+stacksent<-c(b2,b3,b4,b8)
+plot(stacksent)
+
+#rgbspace. there are normally three components to which we associate bands (red, green, blue)
+im.plotRGB(stacksent, r=3, g=2, b=1)
+#we are putting bands one on the top of the others
+#if we want to change colours, we can change the numbers in the code
+im.plotRGB(stacksent, r=4, g=3, b=2)
+#we see peaks, streets, rivers, two kinds of vegetation
+im.plotRGB(stacksent, r=3, g=4, b=2) #let's change again the order of the colour
+im.plotRGB(stacksent, r=3, g=2, b=4) #everything that reflects the NIR will become blue
+
+#if we want to see the correlation of information from one band to another:
+?pairs
+pairs(stacksent)
+#we have the dots plotted and the pearson correlation value
+#second and third band are highly correlated, they are giving more or less the same information
+#the NIR is not that correlated, it is adding some more information
+#in the graphs we see the reflectance of the points
