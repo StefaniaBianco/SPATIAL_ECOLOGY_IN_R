@@ -29,3 +29,6 @@ m2006<-im.import('matogrosso_ast_2006209_lrg.jpg')
 im.plotRGB(m2006, r=2, g=3, b=1)
 #yellow colour is catching our sight more than other colours, so make sense to use it if we want to underline the bare soil
 
+##LECTURE 09/11
+
+
