@@ -63,4 +63,5 @@ dev.off()
 im.plotRGB(stackg, r=1, g=2, b=3)
 #in the central part, as it blue, the temperature is higher in 2015
 
-
+#we have the possibility to monitor changes on the hearth.
+#we can use satellite date to make comparison and plot
