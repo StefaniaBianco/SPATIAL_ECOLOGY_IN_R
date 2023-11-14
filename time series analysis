@@ -20,6 +20,8 @@ plot(dif, col=cldif)
 
 
 ####
+#copernicus is a global land service provided from the EU. We can find maps about vegetation state, energy budget, water cycle, cryosphere
+#new example: temperature in greenland
 
 im.list()
 g2000<-im.import("greenland.2000.tif") #this is a single band representing temperature (16 bits)
@@ -52,7 +54,5 @@ plot(dif.g, col=clg)
 #in the middle we are loosing low temperatures. 
 
 
-#copernicus is a global land service provided from the EU. We can find maps about vegetation state, energy budget, water cycle, cryosphere
-#new example: temperature in greenland
 
 
