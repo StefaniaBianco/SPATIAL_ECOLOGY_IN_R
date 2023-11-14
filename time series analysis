@@ -54,5 +54,13 @@ plot(dif.g, col=clg)
 #in the middle we are loosing low temperatures. 
 
 
+#we can take the images from the stack and put them in the R, G, B channels
+#the high values in 2000 will become red, 
+#the high values in 2005 will become green,
+#the high values in 2010 will become blue.
+dev.off()
+#make RGB plot using different years
+im.plotRGB(stackg, r=1, g=2, b=3)
+#in the central part, as it blue, the temperature is higher in 2015
 
 
