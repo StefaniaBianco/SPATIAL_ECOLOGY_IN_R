@@ -1,0 +1,19 @@
+library(imageRy)
+library(terra)
+
+im.list()
+EN01<-im.import("EN_01.png") #general situation in january in europe of NO2
+EN13<-im.import("EN_13.png") #situation in march. the red part is definitely decreased
+par(mfrow=c(2,1))
+im.plotRGB.auto(EN01)
+im.plotRGB.auto(EN13)
+
+#let's do the difference between march and january
+#we can make the difference using the first element (band) of the two images
+EN01[[01]]-EN13[[01]]
+dev.off()
+plot(dif)
+
+cldif<-colorRampPalette(c("blue","white","red"))(100)
+plot(dif, col=cldif)
+#all the red parts are where the values where higher in January
