@@ -1,15 +1,29 @@
-#we will use vegan package for our multivariate analisys for community ecology. it stays for vegetation-analysis
-
+#we will use vegan package for our multivariate analisys for community ecology. Vegan means vegetation-analysis
+#Overlap package is perfect to see how species are interacting over time
+install.packages("vegan")
 library(vegan)
+install.packages("overlap")
+library(overlap)
 
-#to recall the data, we use the function data()
+#to recall the data from our dataset, we use the function data()
+data(dune)
+dune #we have a matrix of several data all together
+head(dune) #to see the first six rows of the samples
+
+#library(vegan)
+install.packages("overlap")
+library(overlap)
+
+#to recall the data from our dataset, we use the function data()
 data(dune)
 dune #we have a matrix of several plots all together
 head(dune) #to see the first six rows of the samples
 
-#detrended correspondance analysys --> to reshape the data in a simpler mannaer
+#we can use the "detrended correspondence analysis" to see how species are correlated between each other in a plot. 
+#this also helps us to reshape the data in a simpler mannaer
 ord<-decorana(dune)
 ord
+
 #we need to understand the length of the new axes.
 
 ldc1=3.7004 
@@ -32,7 +46,7 @@ pldc2
 pldc3
 pldc4
 
-#we see 1 and 2 that together make more than 70% so we just take the two
+#we see 1 and 2 that together make more than 70% so we 
 
 plot(ord)
 #here we see how different species are related to each other, staying together in any part
