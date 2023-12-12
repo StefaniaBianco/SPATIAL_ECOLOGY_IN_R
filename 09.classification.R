@@ -77,7 +77,17 @@ tab
 
 library(ggplot2)
 #final plot
-t1<-ggplot(tab, aes(x=class, y=y1992, color=class)) + geom_bar(stat="identity", fill="white")
+t1<-ggplot(tab, aes(x=class, y=y1992, color=class)) + geom_bar(stat="identity", fill="white") #aesthetics
+t1
 #we get a table with the bars of the percentage of the year 1192
 t2<-ggplot(tab, aes(x=class, y=y2006, color=class)) + geom_bar(stat="identity", fill="white")
 t2
+
+#to plot them together, we can use the patchwork package. 
+install.packages("patchwork")
+library(patchwork)
+t1+t2 #we see the two plotted together 
+
+#I MISS HOW TO RE-SCALE THE TWO PLOTS
+
+
