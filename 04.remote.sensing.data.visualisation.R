@@ -3,9 +3,9 @@
 install.packages("devtools") 
 library(devtools)
 
+#how to install the imageRy package from GitHub
 devtools::install_github("ducciorocchini/imageRy")
 library(imageRy)
-
 library(terra)
 
 im.list() #we have all the different images we can use
