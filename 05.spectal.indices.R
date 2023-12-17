@@ -1,54 +1,46 @@
-#NDVI=normalized difference vegetation index. NIR-RED
-#when there is a vegetation area, the NIR reflectance value will be high, the RED reflectance will be low
-#NDVI=NIR-RED
-#if the tree is suffering, the reflectance of the NIR will be lower and the RED will be higher, so the DVI will be lower
+#vegetation indexes
 
-#vegetation index
+#when there is a vegetation area in a good state, the NIR reflectance value will be high, the RED reflectance will be low
+#if the tree is suffering, the reflectance of the NIR will be lower and the RED will be higher
+
+#the DVI is given by NIR-RED, so the DVI will be lower if the vegetation is in bad health condition (low value of NIR, high value of RED)
+
+#as the DVI is only a difference, if we want to have a normalized value (between 0 and 1) we can use the NDVI (normalized difference vegetation index). 
+#NDVI=NIR-RED/NIR+RED
+
+#Let's recall our libraries
 library(imageRy)
 library(terra)
 
-#on github there is the description of the data Mato grosso
+im.list() #to see the data inside our packages
+
+#on github there is the description of the data about Mato grosso
 #https://github.com/ducciorocchini/imageRy/blob/main/data_description.md
 #https://earthobservatory.nasa.gov/images/35891/deforestation-in-mato-grosso-brazil
 
-im.list()
+#let's import a picture from the forest in 1992
 m1992<-im.import("matogrosso_l5_1992219_lrg.jpg")
-#resolution=30 meters. this imagine has already been processed. 
-#bands: 1=NIR, 2=RED, 3=GREEN
+#spatial resolution=30 meters. 
+#the bands we have are 1=NIR, 2=RED, 3=GREEN
 im.plotRGB(m1992, r=1, g=2, b=3)
 #a shortcut for the same function
 im.plotRGB(m1992, 1, 2, 3)
 
-im.plotRGB(m1992, r=2, g=1, b=3)
-#green is vegetation, violet is bare soil
+im.plotRGB(m1992, r=2, g=1, b=3) #in this case we have in green the vegetation, in violet we have bare soil
+im.plotRGB(m1992, r=2, g=3, b=1) #another combination, we see the vegetation in blue
 
-im.plotRGB(m1992, r=2, g=3, b=1)
-
-#import the recent image
+#let's import a more recent image
 m2006<-im.import('matogrosso_ast_2006209_lrg.jpg')
 im.plotRGB(m2006, r=2, g=3, b=1)
-#yellow colour is catching our sight more than other colours, so make sense to use it if we want to underline the bare soil
-
-##LECTURE 09/11
-library(imageRy)
-library(terra)
-
-im.list()
-m1992<-im.import("matogrosso_l5_1992219_lrg.jpg")
-#bands 1=NIR, 2=RED, 3=GREEN
-im.plotRGB(m1992,r=2,g=1,b=3)
-im.plotRGB(m1992,r=2,g=3,b=1) #now bare soil and the river is yellow
-
-m2006<-im.import("matogrosso_ast_2006209_lrg.jpg")
-im.plotRGB(m2006,r=2,g=3,b=1)
+#as the yellow colour is catching our sight more than other colours, it makes sense to use it if we want to underline the bare soil
 
 #let's build a multiframe with 1992 and 2006
 par(mfrow=c(1,2))
 im.plotRGB(m1992,r=2,g=3,b=1)
 im.plotRGB(m2006,r=2,g=3,b=1)
-
-#let's create vegetation index to see the health state
 dev.off()
+
+#let's use the vegetation index to see the health state
 plot(m1992[[1]]) #let's plot the NIR band
 #the range goes from 0 to 255. this is the reflectance
 #reflectance=reflected flux of energy/incidence flux of energy
