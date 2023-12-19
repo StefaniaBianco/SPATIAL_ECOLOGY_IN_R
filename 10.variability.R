@@ -1,0 +1,33 @@
+#measuring of RS based variability 
+#important in abiotic and biotic component
+
+#libraries we need
+library(imageRy)
+library(terra)
+library(viridis)
+
+im.list() #to see all the files there are 
+
+sent <- im.import("sentinel.png") #we imported our data
+#in this case, band1=NIR, band2=red, band3=green
+im.plotRGB(sent,r=1,g=2,b=3) #vegetation is red
+im.plotRGB(sent,r=2,g=1,b=3) #vegetation is green
+
+#we want to understand the variability using the standard deviation
+
+nir<-sent[[1]]
+plot(nir) #green part are vegetation, bare soil is orange. we have 256 values so we are working with bits
+
+#to calculate variability, we use the moving window methods
+#we calculate the standard deviation for a the central pixel of a few pixel with one moving window
+#and then we move to calculate the others sd. at the end the moving window will pass from one pixel to the others
+sd3<-focal(nir, matrix(1/9,3,3), fun=sd) #function that makes the calculation of the sd with moving window
+#matrix describes the dimension of the moving windows. it is composed of 9 pixels, from 1 to 9, 3 by 3 pixels
+#function tells what function we want to use, that in this case is sd.
+plot(sd3)
+#let's change the legend by using the package called virisid 
+#we are using the 7 colours of the viridis legend
+viridisc<-colorRampPalette(viridis(7))(255)
+plot(sd3, col=viridisc)
+#by watching where the sd is higher, we can see where the variability is higher
+#in this case is north-west as there are some glaciers and geomorphological uncertaintanties
