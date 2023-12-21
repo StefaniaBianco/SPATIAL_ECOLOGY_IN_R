@@ -31,3 +31,24 @@ viridisc<-colorRampPalette(viridis(7))(255)
 plot(sd3, col=viridisc)
 #by watching where the sd is higher, we can see where the variability is higher
 #in this case is north-west as there are some glaciers and geomorphological uncertaintanties
+
+
+#let's calculate the variability in 7x7 moving windows
+sd7<-focal(nir, matrix(1/49,7,7), fun=sd)
+plot(sd7, col=viridisc)
+
+#let's plot via par(mfrow()) the 3x3 and the 7x7 sd
+par(mfrow=c(1,2))
+plot(sd3, col=viridisc)
+plot(sd7, col=viridisc) #the effect of higher variability is due to the additional pixels we are including
+
+#original image+sd plot all together
+par(mfrow=c(1,2))
+im.plotRGB(sent,r=2,g=1,b=3)
+plot(sd7, col=viridisc)
+#we can compare directly the two images. 
+#high sd can mean or geological variability or species variability
+
+#how to choose the layer to which apply the sd calculation?
+#here we chose NIR, but we need a method
+#this method is the multivariate analysis
