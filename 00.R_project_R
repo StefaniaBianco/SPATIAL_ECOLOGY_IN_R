@@ -1,0 +1,16 @@
+library(imageRy)
+library(terra)
+#DON'T KNOW IF NEEDED
+
+
+setwd("C:/Users/Utente/Desktop/SPATIAL ECOLOGY IN R") 
+image_2012<-rast("16_luglio_2012.jpg")
+plot(image_2012)
+
+image_2022<-rast("11_luglio_2022.jpg")
+plot(image_2022)
+
+dev.off()
+par(mfrow=c(2,1))
+plot(image_2012)
+plot(image_2022)
