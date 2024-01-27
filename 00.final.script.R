@@ -813,8 +813,7 @@ p1 + p2
 
 #10 Variability
 
-#measuring of RS based variability 
-#important in abiotic and biotic component
+#measuring of RS based variability, important in abiotic and biotic component
 
 #libraries we need
 library(imageRy)
@@ -823,33 +822,32 @@ library(viridis)
 
 im.list() #to see all the files there are 
 
+#let's import some sentinel data
 sent <- im.import("sentinel.png") #we imported our data
 #in this case, band1=NIR, band2=red, band3=green
 im.plotRGB(sent,r=1,g=2,b=3) #vegetation is red
 im.plotRGB(sent,r=2,g=1,b=3) #vegetation is green
 
-#we want to understand the variability using the standard deviation
-
-nir<-sent[[1]]
+#we want to understand the variability of the land using the standard deviation
+nir<-sent[[1]] #to see only the near infrared band
 plot(nir) #green part are vegetation, bare soil is orange. we have 256 values so we are working with bits
 
 #to calculate variability, we use the moving window methods
 #we calculate the standard deviation for a the central pixel of a few pixel with one moving window
-#and then we move to calculate the others sd. at the end the moving window will pass from one pixel to the others
-sd3<-focal(nir, matrix(1/9,3,3), fun=sd) #function that makes the calculation of the sd with moving window
-#matrix describes the dimension of the moving windows. it is composed of 9 pixels, from 1 to 9, 3 by 3 pixels
-#function tells what function we want to use, that in this case is sd.
+#and then we move to calculate the others sd. At the end the moving window will pass from one pixel to the other, and will calculate all the sd of the pixels
+sd3<-focal(nir, matrix(1/9,3,3), fun=sd) #focal is a function that makes the calculation of the sd with moving window
+#matrix describes the dimension of the moving windows. it is composed of 9 pixels, from 1 to 9, and analyses pixels 3 by 3
+#fun=function. it tells what is the function we want to use, that in this case is sd.
 plot(sd3)
-#let's change the legend by using the package called virisid 
+#let's change the legend by using the package called viridis 
 #we are using the 7 colours of the viridis legend
 viridisc<-colorRampPalette(viridis(7))(255)
 plot(sd3, col=viridisc)
 #by watching where the sd is higher, we can see where the variability is higher
 #in this case is north-west as there are some glaciers and geomorphological uncertaintanties
 
-
 #let's calculate the variability in 7x7 moving windows
-sd7<-focal(nir, matrix(1/49,7,7), fun=sd)
+sd7<-focal(nir, matrix(1/49,7,7), fun=sd) #same as before but changes the argument inside the parenthesis of matrix
 plot(sd7, col=viridisc)
 
 #let's plot via par(mfrow()) the 3x3 and the 7x7 sd
@@ -866,7 +864,7 @@ plot(sd7, col=viridisc)
 
 #how to choose the layer to which apply the sd calculation?
 #here we chose NIR, but we need a method
-#this method is the multivariate analysis
+#this method is the principal component analysis
 
 #-----------
 
@@ -879,15 +877,12 @@ library(viridis)
 
 im.list() #to see the data we have
 
+#let's import our data
 sent <- im.import ("sentinel.png")
-
-
-#how to choose the layer to which apply the sd calculation?
-#here we chose NIR, but we need a method
-#this method is the multivariate analysis
-
 dev.off()
 
+#how to choose the layer to which apply the sd calculation? before we chose NIR, but we need a method.
+#this method is the principal component analysis. with the function pair we see how bands are correlated to each others
 pairs(sent)
 #red and green are very correlated to each other (0.98 as pearson coefficient)
 #nir is less correlated to the other bands, so it is adding some information
@@ -899,14 +894,15 @@ sentpc
 #the first component is pc1. we can separate it
 pc1<-sentpc$PC1
 
-#let's change the colours
+#let's change the colours for colourblind people
 viridisc<-colorRampPalette(viridis(7))(255)
 plot(pc1,col=viridisc)
 
 #calculating sd on top of pc1
+#first with a 3x3 window
 pc1.sd3<-focal(pc1, matrix(1/9, 3, 3), fun=sd)
 plot(pc1.sd3, col=viridisc)
-
+#then with a 7x7 window
 pc1.sd7<-focal(pc1, matrix(1/49, 7, 7), fun=sd)
 plot(pc1.sd7, col=viridisc)
 
@@ -920,10 +916,9 @@ plot(pc1, col=viridisc)
 plot(pc1.sd3, col=viridisc)
 plot(pc1.sd7, col=viridisc)
 
-#we have chosen in a objective manner to choose the band on which to make the calculation
+#with PCA we have chosen in a objective manner the band on which to make the calculation
 
 #another way to plot everything all together is to stack them
-
 sdstack<-c(sd3, sd7, pc1.sd3,pc1.sd7)
 plot(sdstack, col=viridisc)
 names(sdstack)<-c("sd3","sd7","pc1.sd3", "pc1.sd7") #to give names to our maps
