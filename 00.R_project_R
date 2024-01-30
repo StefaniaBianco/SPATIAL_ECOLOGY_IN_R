@@ -1,16 +1,171 @@
-library(imageRy)
-library(terra)
-#DON'T KNOW IF NEEDED
+#XYLELLA FASTIDIOSA IN SALENTO: ANALYSIS OF AN ECOLOGICAL COLLAPSE
+
+##########INTRO##########
+
+#recall all the packages needed for the project
+library(terra) #for the rast and crop functions
+library(viridis)#to have a color ramp palette inclusive for color blind people
+library(imageRy)#for the function im.classify
+library(ggplot2)#for plotting the data in a proper way
+
+#to set our working directory from where R will take the data
+setwd("C:/Users/Utente/Desktop/SPATIAL ECOLOGY IN R/EXAM_PROJECT") 
+
+#to set the color ramp palette inclusive for color blind people
+cl<-colorRampPalette(viridis(7))(255) 
 
 
-setwd("C:/Users/Utente/Desktop/SPATIAL ECOLOGY IN R") 
-image_2012<-rast("16_luglio_2012.jpg")
-plot(image_2012)
+##########PART 1: NDVI CALCULATION AND COMPARISON##########
 
-image_2022<-rast("11_luglio_2022.jpg")
-plot(image_2022)
+#let's import data from 2015, Salento
+#they are copernicus browser data coming from sentinel-2
+#we have 3 bands inside our first file (false colour combination)
+ #band 1=NIR [B8]
+ #band 2=RED [B4]
+ #band 3=GREEN [B3]
+im_2015<-rast("2015-08-14-00_00_2015-08-14-23_59_Sentinel-2_L1C_False_color.jpg")
+plot(im_2015)
+#let's calculate the NDVI=NIR-RED/NIR+RED
+NDVI_2015<-(im_2015[[1]]-im_2015[[2]])/(im_2015[[1]]+im_2015[[2]])
+plot(NDVI_2015,col=cl)
+
+#data import from 2023
+im_2023<-rast("2023-08-22-00_00_2023-08-22-23_59_Sentinel-2_L1C_False_color.jpg")
+plot(im_2023)
+#NDVI calculation 2023
+NDVI_2023<-(im_2023[[1]]-im_2023[[2]])/(im_2023[[1]]+im_2023[[2]])
+plot(NDVI_2023, col=cl)
+dev.off()
+
+#create a stack of the two years
+NDVI_stack<-c(NDVI_2015, NDVI_2023)
+plot(NDVI_stack, col=cl)
+names(NDVI_stack)<-c("SALENTO.NDVI.2015","SALENTO.NDVI.2023")
+dev.off()
+
+#calculate the difference between the two years
+NDVI_diff<-NDVI_2015-NDVI_2023
+plot(NDVI_diff, col=cl)
+dev.off()
+
+#divide the pixels by two classes to see where the NDVI did not change and where it did
+NDVI_class<-im.classify(NDVI_diff, 2)
+plot(NDVI_class)
+dev.off()
+
+#plot difference and classes together with a multiframe
+par(mfrow=c(1,2))
+plot(NDVI_diff, col=cl)
+plot(NDVI_class)
+dev.off()
+
+##########PART 2: NDMI CALCULATION AND COMPARISON##########
+
+#Normalized Difference Moisture Index-->depends on the vegetation 
+#this time we have single band images, so we have to make the difference and the sum directly with the images
+#NDMI=NIR-SWIR/NIR+SWIR
+#with sentinel-2, NIR=BAND 8A, SWIR=B11
+
+#2015 data import
+B8A.2015<-rast("B8A.2015.jpg")
+B11.2015<-rast("B11.2015.jpg")
+#2015 NDMI calculation
+NDMI_2015=(B8A.2015-B11.2015)/(B8A.2015+B11.2015)
+plot(NDMI_2015, col=cl)
+
+#2023 data import
+B8A.2023<-rast("B8A.2023.jpg")
+B11.2023<-rast("B11.2023.jpg")
+#2023 NDMI calculation
+NDMI_2023=(B8A.2023-B11.2023)/(B8A.2023+B11.2023)
+plot(NDMI_2023, col=cl)
 
 dev.off()
-par(mfrow=c(2,1))
-plot(image_2012)
-plot(image_2022)
+
+#create a stack of the two years
+NDMI_stack<-c(NDMI_2015, NDMI_2023)
+plot(NDMI_stack, col=cl)
+names(NDMI_stack)<-c("SALENTO.NDMI.2015","SALENTO.NDMI.2023")
+dev.off()
+
+#calculate the difference
+NDMI_diff=NDMI_2015-NDMI_2023
+plot(NDMI_diff, col=cl)
+
+#divide the pixels in two classes: where NDMI did not change and where it did change
+NDMI_diff_class<-im.classify(NDMI_diff,2)
+plot(NDMI_diff_class, col=cl)
+dev.off()
+
+#plot them together
+par(mfrow=c(1,2))
+plot(NDMI_diff, col=cl)
+plot(NDMI_diff_class, col=cl)
+
+##########PART 3: FCOVER COMPARISON##########
+
+#FCOVER=Fraction of green vegetation cover
+#this time the data are coming from Copernicus Earth Observatory
+#the indexes is already calculated, we can only make a multi temporal comparison 
+
+#2015 data import
+FCOVER_2015<-rast("ok_c_gls_FCOVER300_QL_201408200000_GLOBE_PROBAV_V1.0.1.tiff")
+#this file has the whole globe extention
+#we need to crop it with the coordinates of our study area
+ext<-c(17.4, 18.6, 39.8, 40.7) #vector with minimum longitude, maximum longitude, minimum latitude, maximum latitude)
+FCOVER_2015.crop<-crop(FCOVER_2015, ext) #the function crop crops our image with the coordinates we put in the ext vector
+plot(FCOVER_2015.crop)
+
+#same procedure for 2022
+FCOVER_2022<-rast("ok_c_gls_FCOVER300-RT1_QL_202208200000_GLOBE_OLCI_V1.1.2.tiff")
+FCOVER_2022.crop<-crop(FCOVER_2022, ext)
+plot(FCOVER_2022.crop)
+
+dev.off()
+
+#create a stack of the two years
+FCOVER_stack<-c(FCOVER_2015.crop, FCOVER_2022.crop)
+plot(FCOVER_stack)
+names(FCOVER_stack)<-c("VEGETATION.COVER.2015","VEGETATION.COVER.2022")
+dev.off()
+  
+#calculate the difference between the two years
+diff_fcover= FCOVER_2015.crop - FCOVER_2022.crop
+plot(diff_fcover)
+
+#let's zoom a bit in the area, focusing in the central part of Salento
+ext_focus<-c(18.009, 18.390, 39.956, 40.324) #new coordinates
+#crop the difference 2015-2023
+diff_crop<-crop(diff_fcover, ext_focus)
+plot(diff_crop)
+
+#classify the pixels of the difference
+diff_crop_class<-im.classify(diff_crop)
+plot(diff_crop_class) #we get three different classes: low, medium and high difference between the two years
+
+#multiframe with the 2015-2023 crop and the classes
+par(mfrow=c(1,2))
+plot(diff_crop)
+plot(diff_crop_class)
+
+#we can calculate the classes frequency with the function freq
+fdiff<-freq(diff_crop_class)
+#we can calculate the total number of cells
+totdiff <- ncell(diff_crop_class) 
+#we can make the percentage of the frequencies of the classes based on the total number of cells
+percentagediff<-fdiff*100/totdiff
+percentagediff
+
+#we can assign names to the three classes
+Classes<- c("Low difference", "Medium difference", "High difference")
+#create a vector with the percentage frequency
+Frequency<-c(36.11, 22.22, 41.66)
+#create a data frame with the classes and the frequencies
+tab<-data.frame(Classes, Frequency)
+tab
+
+#we can create a plot thanks to the ggplot function
+classes_plot<-ggplot(tab, aes(x=Classes, y=Frequency, color=classes)) + geom_bar(stat="identity", fill="white") #aes=aesthetics characteristics
+classes_plot
+
+##########END OF THE PROJECT##########
