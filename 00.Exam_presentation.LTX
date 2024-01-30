@@ -1,0 +1,222 @@
+\documentclass{beamer}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{listings}
+
+\usetheme{PaloAlto}
+\usecolortheme{crane}
+
+\title{\textit{Xylella fastidiosa} in Salento (Italy)}
+\author{Analysis of an ecological collapse}
+\date{31 January 2024}
+
+\begin{document}
+
+\maketitle
+
+\AtBeginSection[] % Do nothing for \section*
+{
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\section{Introduction}
+\begin{frame}{\textit{Xylella fastidiosa} outbreak in Salento}
+\begin{itemize}
+    \item \textit{Xylella fastidiosa}: what is it?
+    \item Possible causes
+    \item (Not only) ecological consequences
+\end{itemize}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+    \includegraphics[width=\textwidth]{ulivi_salento.jpg}
+\end{column}
+\begin{column}{0.5\textwidth}  
+    \begin{center}
+     \includegraphics[width=\textwidth]{ulivi_xylella.jpg}
+     \end{center}
+\end{column}
+\end{columns}
+\end{frame} 
+
+\begin{frame}{\textit{Xylella fastidiosa} outbreak in Salento}
+\begin{itemize}
+    \item Study area: Salento, Puglia (South Italy)
+    \item Temporal scale: 2014-present
+\end{itemize}
+   \centering
+    \includegraphics[width=0.4\textwidth]{Map-of-the-study-area-Salento-Peninsula-SE-Italy-Asterisks-indicate-sampling.png}
+\end{frame} 
+
+\section{Aim of the project}
+\begin{frame}{Aim of the project}
+Analysis of the following index in the Salento peninsula
+\begin{itemize} 
+    \item  \begin{equation}
+NDVI=\frac{NIR-RED}{NIR+RED}
+    \end{equation}
+    \item  \begin{equation}
+NDMI=\frac{NIR-SWIR}{NIR+SWIR}
+    \end{equation}
+    \item  Fraction of Green Vegetation Cover
+\end{itemize}
+Between years 2015 and 2023 to compare them before and after the outbreak. 
+\end{frame}
+
+\section{Matherials and methods}
+\begin{frame}{Matherials and methods}
+    \begin{itemize}
+    \item Copernicus browser: Sentinel-2 bands
+    \item Analysis of the ecological indexes in \texttt{R}
+    \item Copernicus land observatory: FCOVER index
+    \end{itemize}
+\begin{columns}
+\begin{column}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{cop_browser.png}
+\end{column}
+\begin{column}{0.3\textwidth}  
+    \begin{center}
+     \includegraphics[width=\textwidth]{r.png}
+     \end{center}
+     \end{column}
+   \begin{column}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{land_obs.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Matherials and methods (2)}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+ Packages used:
+\begin{itemize}
+    \item    \texttt{library(terra)} 
+    \item    \texttt{library(viridis)} 
+    \item    \texttt{library(imageRy)} 
+    \item    \texttt{library(ggplot2)} 
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}  
+ Functions used:
+ \begin{itemize}
+    \item    \texttt{setwd()} 
+    \item    \texttt{colorRampPalette} 
+    \item    \texttt{rast} 
+    \item    \texttt{R} as a calculator
+    \item    \texttt{im.classify}
+    \item    \texttt{par}
+    \item    \texttt{freq}
+    \item    \texttt{ncell}
+    \item    \texttt{data.frame}
+    \item    \texttt{ggplot}
+    \end{itemize}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\section{Result: NDVI}
+\begin{frame}{Results: NDVI}
+    \includegraphics[width=\textwidth]{1.NDVI.STACK.png}
+\end{frame}
+    
+\begin{frame} {Results: NDVI (2)}
+\frametitle{Results: NDVI (2)}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+ 
+   NDVI difference: 2015-2023
+    \includegraphics[width=\textwidth]{2.NDVI_diff.png}
+\end{column}
+\begin{column}{0.5\textwidth}  
+    \begin{center}
+    NDVI difference: classes
+     \includegraphics[width=\textwidth]{3.diff_class.png}
+     \end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\section{Result: NDMI}
+\begin{frame}{Results: NDMI}
+    \includegraphics[width=\textwidth]{4.NDMI STACK.png}
+\end{frame}
+
+\begin{frame} {Results: NDMI (2)}
+\frametitle{Results: NDMI (2)}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+ 
+   NDMI difference: 2015-2023
+    \includegraphics[width=\textwidth]{5.NDMI diff.png}
+\end{column}
+\begin{column}{0.5\textwidth}  
+    \begin{center}
+    NDMI difference: classes
+     \includegraphics[width=\textwidth]{6.NDMI class.png}
+     \end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Result: FCOVER}
+\begin{frame}{Results: Fraction of Green Vegetation Cover}
+    \includegraphics[width=\textwidth]{veg_cover.png}
+\end{frame}
+
+\begin{frame}{Results: Fraction of Green Vegetation Cover(2)}
+   FCOVER difference: 2015-2022
+    \includegraphics[width=\textwidth]{Diff_veg_cover.png}
+\end{frame}
+
+\begin{frame}{Results: Fraction of Green Vegetation Cover(3)}
+   \begin{columns}
+\begin{column}{0.3\textwidth}
+\underline{Focus}: FCOVER vegetation difference
+    \includegraphics[width=\textwidth]{veg_diff_crop.png}
+\end{column}
+\begin{column}{0.3\textwidth} 
+\pause \underline{Focus}: FCOVER difference classes
+    \begin{center}
+     \includegraphics[width=\textwidth]{diff_crop_class.png}
+     \end{center}
+     \end{column}
+   \begin{column}{0.3\textwidth}
+\pause \underline{Plot}: FCOVER difference classes
+    \includegraphics[width=\textwidth]{veg_diff_classes_plot.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Discussion}
+\begin{frame}{Discussion}
+    \begin{itemize}
+        \item The results obtained with this analysis on \texttt{R} are in line with the real situation;
+       \pause \item All the ecological indexes analysed (NDVI, NDMI, FCOVER) showed a better situation in year 2015 rather than in year 2023;
+       \pause \item There is a strong need for ecosystem restoration in Salento peninsula;
+       \pause \item Salento has to become a case study as example of ecological collapse: we can learn from our mistakes and do \boldsymbol{not} do them again! 
+    \end{itemize}
+\end{frame}
+
+\section{Sitography}
+\begin{frame}{Sitography}
+    \begin{itemize}
+        \item \url{https://dataspace.copernicus.eu/browser}
+        \item \url{https://custom-scripts.sentinel-hub.com/sentinel-2/ndmi}
+        \item \url{https://land.copernicus.vgt.vito.be}
+        \item \url{https://land.copernicus.eu/global/products/fcover}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you for your attention!}
+
+ My GitHub profile:\url{https://github.com/StefaniaBianco}
+     \centering
+     \includegraphics[width=0.7\textwidth]{olive-grove-1889.jpg}\\
+\centering
+\textit{Stefania Bianco}
+\end{frame}
+
+\end{document}
